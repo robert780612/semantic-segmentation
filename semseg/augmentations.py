@@ -252,8 +252,8 @@ class ResizePad:
         scale_factor = min(tH/H, tW/W) if W > H else max(tH/H, tW/W)
         # nH, nW = int(H * scale_factor + 0.5), int(W * scale_factor + 0.5)
         nH, nW = round(H*scale_factor), round(W*scale_factor)
-        img = TF.resize(img, (nH, nW), TF.InterpolationMode.BILINEAR)
-        mask = TF.resize(mask, (nH, nW), TF.InterpolationMode.NEAREST)
+        img = TF.resize(img, (nH, nW), TF.InterpolationMode.BILINEAR, antialias=True)
+        mask = TF.resize(mask, (nH, nW), TF.InterpolationMode.NEAREST, antialias=True)
 
         # pad the image
         padding = [0, 0, tW - nW, tH - nH]
@@ -278,13 +278,13 @@ class Resize:
         # scale the image 
         scale_factor = self.size[0] / min(H, W)
         nH, nW = round(H*scale_factor), round(W*scale_factor)
-        img = TF.resize(img, (nH, nW), TF.InterpolationMode.BILINEAR)
-        mask = TF.resize(mask, (nH, nW), TF.InterpolationMode.NEAREST)
+        img = TF.resize(img, (nH, nW), TF.InterpolationMode.BILINEAR, antialias=True)
+        mask = TF.resize(mask, (nH, nW), TF.InterpolationMode.NEAREST, antialias=True)
 
         # make the image divisible by stride
         alignH, alignW = int(math.ceil(nH / 32)) * 32, int(math.ceil(nW / 32)) * 32
-        img = TF.resize(img, (alignH, alignW), TF.InterpolationMode.BILINEAR)
-        mask = TF.resize(mask, (alignH, alignW), TF.InterpolationMode.NEAREST)
+        img = TF.resize(img, (alignH, alignW), TF.InterpolationMode.BILINEAR, antialias=True)
+        mask = TF.resize(mask, (alignH, alignW), TF.InterpolationMode.NEAREST, antialias=True)
         return img, mask 
 
 
@@ -309,8 +309,8 @@ class RandomResizedCrop:
         scale_factor = min(max(scale)/max(H, W), min(scale)/min(H, W))
         nH, nW = int(H * scale_factor + 0.5), int(W * scale_factor + 0.5)
         # nH, nW = int(math.ceil(nH / 32)) * 32, int(math.ceil(nW / 32)) * 32
-        img = TF.resize(img, (nH, nW), TF.InterpolationMode.BILINEAR)
-        mask = TF.resize(mask, (nH, nW), TF.InterpolationMode.NEAREST)
+        img = TF.resize(img, (nH, nW), TF.InterpolationMode.BILINEAR, antialias=True)
+        mask = TF.resize(mask, (nH, nW), TF.InterpolationMode.NEAREST, antialias=True)
 
         # random crop
         margin_h = max(img.shape[1] - tH, 0)
@@ -341,7 +341,7 @@ def get_train_augmentation(size: Union[int, Tuple[int], List[int]], seg_fill: in
         # RandomGaussianBlur((3, 3), p=0.5),
         # RandomGrayscale(p=0.5),
         # RandomRotation(degrees=10, p=0.3, seg_fill=seg_fill),
-        RandomResizedCrop(size, scale=(0.5, 2.0), seg_fill=seg_fill, antialias=True),
+        RandomResizedCrop(size, scale=(0.5, 2.0), seg_fill=seg_fill),
         Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
     ])
 
