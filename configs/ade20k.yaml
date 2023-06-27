@@ -8,7 +8,7 @@ MODEL:
 
 DATASET:
   NAME          : ADE20K                                              # dataset name to be trained with (camvid, cityscapes, ade20k)
-  ROOT          : 'data/ADEChallengeData2016'                         # dataset root path
+  ROOT          : '/home/dataset/ADE20k/ADEChallengeData2016'                         # dataset root path
   IGNORE_LABEL  : 255
 
 TRAIN:
