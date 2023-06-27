@@ -50,7 +50,7 @@ class ADE20K(Dataset):
         split = 'training' if split == 'train' else 'validation'
         self.transform = transform
         self.n_classes = len(self.CLASSES)
-        self.ignore_label = 255
+        self.ignore_label = -1
 
         img_path = Path(root) / 'images' / split 
         self.files = list(img_path.glob('*.jpg'))
